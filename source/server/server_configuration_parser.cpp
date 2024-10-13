@@ -16,6 +16,7 @@ namespace nidevice_grpc {
 
 static const char* kDefaultFilename = "server_config.json";
 static const char* kPortJsonKey = "port";
+static const char* kSidebandIpJsonKey = "sideband_ip";
 static const char* kServerCertJsonKey = "server_cert";
 static const char* kServerKeyJsonKey = "server_key";
 static const char* kRootCertJsonKey = "root_cert";
@@ -113,6 +114,12 @@ std::string ServerConfigurationParser::parse_address() const
     throw InvalidPortException();
   }
   return kDefaultAddressPrefix + std::to_string(parsed_port);
+}
+
+std::string ServerConfigurationParser::parse_sideband_ip() const
+{
+  auto it = config_file_.find(kSidebandIpJsonKey);
+  return it != config_file_.end() ? it->get<std::string>() : "";
 }
 
 std::string ServerConfigurationParser::parse_server_cert() const

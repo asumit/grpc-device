@@ -339,10 +339,16 @@ target_link_libraries(ni_grpc_device_server
   nlohmann_json::nlohmann_json
 )
 
-target_link_libraries(ni_grpc_device_server
-  ni_grpc_sideband
-  ${RDMA_LIB}
-)
+if (INCLUDE_SIDEBAND_RDMA)
+  target_link_libraries(ni_grpc_device_server
+    ni_grpc_sideband
+    ${RDMA_LIB}
+  )
+else()
+  target_link_libraries(ni_grpc_device_server
+      ni_grpc_sideband
+  )
+endif()
 
 set_target_properties(ni_grpc_device_server PROPERTIES BUILD_WITH_INSTALL_RPATH TRUE)
 

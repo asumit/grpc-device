@@ -20,6 +20,7 @@ using FeatureState = nidevice_grpc::FeatureToggles::FeatureState;
 
 struct ServerConfiguration {
   std::string server_address;
+  std::string sideband_ip;
   std::string server_cert;
   std::string server_key;
   std::string root_cert;
@@ -35,6 +36,7 @@ static ServerConfiguration GetConfiguration(const std::string& config_file_path)
         ? nidevice_grpc::ServerConfigurationParser()
         : nidevice_grpc::ServerConfigurationParser(config_file_path);
     config.server_address = server_config_parser.parse_address();
+    config.sideband_ip = server_config_parser.parse_sideband_ip();
     config.server_cert = server_config_parser.parse_server_cert();
     config.server_key = server_config_parser.parse_server_key();
     config.root_cert = server_config_parser.parse_root_cert();
@@ -90,9 +92,9 @@ static void RunServer(const ServerConfiguration& config)
     server = builder.BuildAndStart();
   }
 
-  auto sideband_socket_thread = new std::thread(RunSidebandSocketsAccept, "localhost", 50055);
-  auto sideband_rdma_send_thread = new std::thread(AcceptSidebandRdmaSendRequests);
-  auto sideband_rdma_recv_thread = new std::thread(AcceptSidebandRdmaReceiveRequests);
+  auto sideband_socket_thread = new std::thread(RunSidebandSocketsAccept, config.sideband_ip, 50055);
+  // auto sideband_rdma_send_thread = new std::thread(AcceptSidebandRdmaSendRequests);
+  // auto sideband_rdma_recv_thread = new std::thread(AcceptSidebandRdmaReceiveRequests);
 
   if (!server) {
     nidevice_grpc::logging::log(

@@ -32,6 +32,7 @@ class ServerConfigurationParser {
   static std::string get_exe_path();
 
   std::string parse_address() const;
+  std::string parse_sideband_ip() const;
   std::string parse_server_cert() const;
   std::string parse_server_key() const;
   std::string parse_root_cert() const;
