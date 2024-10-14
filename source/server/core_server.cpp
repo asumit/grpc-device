@@ -92,7 +92,7 @@ static void RunServer(const ServerConfiguration& config)
     server = builder.BuildAndStart();
   }
 
-  auto sideband_socket_thread = new std::thread(RunSidebandSocketsAccept, config.sideband_ip, 50055);
+  auto sideband_socket_thread = new std::thread(RunSidebandSocketsAccept, config.sideband_ip.c_str(), 50055);
   // auto sideband_rdma_send_thread = new std::thread(AcceptSidebandRdmaSendRequests);
   // auto sideband_rdma_recv_thread = new std::thread(AcceptSidebandRdmaReceiveRequests);
 

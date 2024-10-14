@@ -122,7 +122,8 @@ namespace ni::data_monikers
     #endif
 
         google::protobuf::Arena arena;
-        int64_t sidebandToken = GetOwnerSidebandDataToken(sidebandIdentifier);
+        int64_t sidebandToken;
+        GetOwnerSidebandDataToken(sidebandIdentifier.c_str(), &sidebandToken);
         while (true)
         {
             auto writeRequest = google::protobuf::Arena::CreateMessage<SidebandWriteRequest>(&arena);
@@ -190,7 +191,8 @@ namespace ni::data_monikers
         auto bufferSize = 1024 * 1024;
         auto strategy = static_cast<::SidebandStrategy>(request->strategy());
 
-        auto identifier = InitOwnerSidebandData(strategy, bufferSize);
+        char identifier[32] = {};
+        InitOwnerSidebandData(strategy, bufferSize, identifier);;
         response->set_strategy(request->strategy());
         response->set_sideband_identifier(identifier);
         response->set_connection_url(GetConnectionAddress(strategy));
