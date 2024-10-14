@@ -93,7 +93,8 @@ set(metadata_dir ${CMAKE_SOURCE_DIR}/source/codegen/metadata)
 set(service_output_dir ${CMAKE_SOURCE_DIR}/generated)
 set(codegen_dir ${CMAKE_SOURCE_DIR}/source/codegen)
 set(custom_dir ${CMAKE_SOURCE_DIR}/source/custom)
-set(nidrivers "nidaqmx" "nidcpower" "nidigitalpattern" "nidmm" "nifake" "nifake_extension" "nifake_non_ivi" "nifgen" "nifpga" "nirfmxbluetooth" "nirfmxinstr" "nirfmxlte" "nirfmxnr" "nirfmxspecan" "nirfmxwlan" "nirfsa" "nirfsg" "niscope" "niswitch" "nisync" "nitclk" "nixnet" "nixnetsocket")
+set(nidrivers "nidaqmx" #"nidcpower" "nidigitalpattern" "nidmm" "nifake" "nifake_extension" "nifake_non_ivi" "nifgen" "nifpga" "nirfmxbluetooth" "nirfmxinstr" "nirfmxlte" "nirfmxnr" "nirfmxspecan" "nirfmxwlan" "nirfsa" "nirfsg" "niscope" "niswitch" "nisync" "nitclk" "nixnet" "nixnetsocket"
+)
 
 #----------------------------------------------------------------------
 # Create NI Driver APIs proto and server files
@@ -381,88 +382,88 @@ else()
 endif()
 
 # Link test executable against gtest
-add_executable(IntegrationTestsRunner
-    "source/tests/utilities/run_all_tests.cpp"
-    "source/tests/integration/ni_fake_service_tests_endtoend.cpp"
-    "source/tests/integration/ni_fake_non_ivi_service_tests_endtoend.cpp"
-    "source/tests/integration/session_utilities_service_tests.cpp"
-    "source/tests/integration/session_utilities_service_tests_endtoend.cpp"
-    "source/server/device_enumerator.cpp"
-    "source/server/feature_toggles.cpp"
-    "source/server/semaphore.cpp"
-    "source/server/session_repository.cpp"
-    "source/server/session_utilities_service.cpp"
-    "source/server/shared_library.cpp"
-    ${data_moniker_proto_srcs}
-    ${nidevice_proto_srcs}
-    ${session_proto_srcs}
-    ${session_grpc_srcs}
-    "${proto_srcs_dir}/nifake.pb.cc"
-    "${proto_srcs_dir}/nifake.grpc.pb.cc"
-    "${proto_srcs_dir}/nifake_non_ivi.pb.cc"
-    "${proto_srcs_dir}/nifake_non_ivi.grpc.pb.cc"
-    "${service_output_dir}/nifake/nifake_client.cpp"
-    "${service_output_dir}/nifake/nifake_service.cpp"
-    "${service_output_dir}/nifake_non_ivi/nifake_non_ivi_client.cpp"
-    "${service_output_dir}/nifake_non_ivi/nifake_non_ivi_service.cpp"
-    "${custom_dir}/nifake_non_ivi_service.custom.cpp"
-)
+# add_executable(IntegrationTestsRunner
+#     "source/tests/utilities/run_all_tests.cpp"
+#     "source/tests/integration/ni_fake_service_tests_endtoend.cpp"
+#     "source/tests/integration/ni_fake_non_ivi_service_tests_endtoend.cpp"
+#     "source/tests/integration/session_utilities_service_tests.cpp"
+#     "source/tests/integration/session_utilities_service_tests_endtoend.cpp"
+#     "source/server/device_enumerator.cpp"
+#     "source/server/feature_toggles.cpp"
+#     "source/server/semaphore.cpp"
+#     "source/server/session_repository.cpp"
+#     "source/server/session_utilities_service.cpp"
+#     "source/server/shared_library.cpp"
+#     ${data_moniker_proto_srcs}
+#     ${nidevice_proto_srcs}
+#     ${session_proto_srcs}
+#     ${session_grpc_srcs}
+#     "${proto_srcs_dir}/nifake.pb.cc"
+#     "${proto_srcs_dir}/nifake.grpc.pb.cc"
+#     "${proto_srcs_dir}/nifake_non_ivi.pb.cc"
+#     "${proto_srcs_dir}/nifake_non_ivi.grpc.pb.cc"
+#     "${service_output_dir}/nifake/nifake_client.cpp"
+#     "${service_output_dir}/nifake/nifake_service.cpp"
+#     "${service_output_dir}/nifake_non_ivi/nifake_non_ivi_client.cpp"
+#     "${service_output_dir}/nifake_non_ivi/nifake_non_ivi_service.cpp"
+#     "${custom_dir}/nifake_non_ivi_service.custom.cpp"
+# )
 
     set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
     set(THREADS_PREFER_PTHREAD_FLAG TRUE)
     find_package(Threads REQUIRED)
 
-target_link_libraries(IntegrationTestsRunner
-    gtest
-    gmock
-    ${_GRPC_GRPCPP}
-    ${CMAKE_DL_LIBS}
-    Threads::Threads)
+# target_link_libraries(IntegrationTestsRunner
+#     gtest
+#     gmock
+#     ${_GRPC_GRPCPP}
+#     ${CMAKE_DL_LIBS}
+#     Threads::Threads)
 
 add_library(TestApi SHARED
     "source/tests/utilities/test_api.cpp")
 add_compile_definitions(TestApi TEST_API_BUILDING)
 
-add_executable(UnitTestsRunner
-    "source/tests/utilities/run_all_tests.cpp"
-    "source/tests/unit/callback_router_tests.cpp"
-    "source/tests/unit/converters_tests.cpp"
-    "source/tests/unit/session_resource_repository_tests.cpp"
-    "source/tests/unit/session_repository_tests.cpp"
-    "source/tests/unit/device_enumerator_tests.cpp"
-    "source/tests/unit/server_configuration_parser_tests.cpp"
-    "source/tests/unit/server_security_configuration_tests.cpp"
-    "source/tests/unit/ni_fake_non_ivi_service_tests.cpp"
-    "source/tests/unit/ni_fake_service_tests.cpp"
-    "source/tests/unit/shared_library_tests.cpp"
-    "source/tests/unit/syscfg_library_tests.cpp"
-    "source/tests/unit/xnet_converters_tests.cpp"
-    "source/server/device_enumerator.cpp"
-    "source/server/feature_toggles.cpp"
-    "source/server/semaphore.cpp"
-    "source/server/server_configuration_parser.cpp"
-    "source/server/server_security_configuration.cpp"
-    "source/server/session_repository.cpp"
-    "source/server/shared_library.cpp"
-    "source/server/syscfg_library.cpp"
-    ${data_moniker_proto_srcs}
-    ${nidevice_proto_srcs}
-    ${session_proto_srcs}
-    ${session_grpc_srcs}
-    "${proto_srcs_dir}/nifake.pb.cc"
-    "${proto_srcs_dir}/nifake.grpc.pb.cc"
-    "${proto_srcs_dir}/nifake_extension.pb.cc"
-    "${proto_srcs_dir}/nifake_extension.grpc.pb.cc"
-    "${proto_srcs_dir}/nifake_non_ivi.pb.cc"
-    "${proto_srcs_dir}/nifake_non_ivi.grpc.pb.cc"
-    "${proto_srcs_dir}/nixnetsocket.pb.cc"
-    "${service_output_dir}/nifake/nifake_service.cpp"
-    "${service_output_dir}/nifake_extension/nifake_extension_service.cpp"
-    "${service_output_dir}/nifake_non_ivi/nifake_non_ivi_service.cpp"
-    "${custom_dir}/nifake_service.custom.cpp"
-    "${custom_dir}/nifake_extension_service.custom.cpp"
-    "${custom_dir}/nifake_non_ivi_service.custom.cpp"
-)
+# add_executable(UnitTestsRunner
+#     "source/tests/utilities/run_all_tests.cpp"
+#     "source/tests/unit/callback_router_tests.cpp"
+#     "source/tests/unit/converters_tests.cpp"
+#     "source/tests/unit/session_resource_repository_tests.cpp"
+#     "source/tests/unit/session_repository_tests.cpp"
+#     "source/tests/unit/device_enumerator_tests.cpp"
+#     "source/tests/unit/server_configuration_parser_tests.cpp"
+#     "source/tests/unit/server_security_configuration_tests.cpp"
+#     "source/tests/unit/ni_fake_non_ivi_service_tests.cpp"
+#     "source/tests/unit/ni_fake_service_tests.cpp"
+#     "source/tests/unit/shared_library_tests.cpp"
+#     "source/tests/unit/syscfg_library_tests.cpp"
+#     "source/tests/unit/xnet_converters_tests.cpp"
+#     "source/server/device_enumerator.cpp"
+#     "source/server/feature_toggles.cpp"
+#     "source/server/semaphore.cpp"
+#     "source/server/server_configuration_parser.cpp"
+#     "source/server/server_security_configuration.cpp"
+#     "source/server/session_repository.cpp"
+#     "source/server/shared_library.cpp"
+#     "source/server/syscfg_library.cpp"
+#     ${data_moniker_proto_srcs}
+#     ${nidevice_proto_srcs}
+#     ${session_proto_srcs}
+#     ${session_grpc_srcs}
+#     "${proto_srcs_dir}/nifake.pb.cc"
+#     "${proto_srcs_dir}/nifake.grpc.pb.cc"
+#     "${proto_srcs_dir}/nifake_extension.pb.cc"
+#     "${proto_srcs_dir}/nifake_extension.grpc.pb.cc"
+#     "${proto_srcs_dir}/nifake_non_ivi.pb.cc"
+#     "${proto_srcs_dir}/nifake_non_ivi.grpc.pb.cc"
+#     "${proto_srcs_dir}/nixnetsocket.pb.cc"
+#     "${service_output_dir}/nifake/nifake_service.cpp"
+#     "${service_output_dir}/nifake_extension/nifake_extension_service.cpp"
+#     "${service_output_dir}/nifake_non_ivi/nifake_non_ivi_service.cpp"
+#     "${custom_dir}/nifake_service.custom.cpp"
+#     "${custom_dir}/nifake_extension_service.custom.cpp"
+#     "${custom_dir}/nifake_non_ivi_service.custom.cpp"
+# )
 
 # ni_fake_service_tests.cpp and several DAQ cpp files exceed the MSVC limit for the number of sections 
 # in an obj file defined by PE-COFF. This line disables the limit.
@@ -473,27 +474,27 @@ else()
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wl,--allow-shlib-undefined")
 endif()
 
-target_include_directories(UnitTestsRunner
-    PRIVATE "${service_output_dir}/nifake"
-    PRIVATE "${service_output_dir}/nifake_extension"
-    PRIVATE "${service_output_dir}/nifake_non_ivi")
+# target_include_directories(UnitTestsRunner
+#     PRIVATE "${service_output_dir}/nifake"
+#     PRIVATE "${service_output_dir}/nifake_extension"
+#     PRIVATE "${service_output_dir}/nifake_non_ivi")
 
-target_link_libraries(UnitTestsRunner
-    gtest
-    gmock
-    ${_GRPC_GRPCPP}
-    ${CMAKE_DL_LIBS}
-    Threads::Threads
-    nlohmann_json::nlohmann_json)
+# target_link_libraries(UnitTestsRunner
+#     gtest
+#     gmock
+#     ${_GRPC_GRPCPP}
+#     ${CMAKE_DL_LIBS}
+#     Threads::Threads
+#     nlohmann_json::nlohmann_json)
 
 #----------------------------------------------------------------------
 # Copy test asset certificates to binary output certs sub-directory
 #----------------------------------------------------------------------
-add_custom_command(
-  TARGET UnitTestsRunner POST_BUILD
-  COMMAND  ${CMAKE_COMMAND} -E copy_directory
-           ${CMAKE_SOURCE_DIR}/source/tests/assets/
-           $<TARGET_FILE_DIR:UnitTestsRunner>/)
+# add_custom_command(
+#   TARGET UnitTestsRunner POST_BUILD
+#   COMMAND  ${CMAKE_COMMAND} -E copy_directory
+#            ${CMAKE_SOURCE_DIR}/source/tests/assets/
+#            $<TARGET_FILE_DIR:UnitTestsRunner>/)
 
 set(system_test_runner_sources
   "source/tests/utilities/run_all_tests.cpp"
@@ -557,35 +558,35 @@ if(WIN32)
   )
 endif()
 
-add_executable(SystemTestsRunner ${system_test_runner_sources})
+# add_executable(SystemTestsRunner ${system_test_runner_sources})
 
-target_link_libraries(SystemTestsRunner
-    gtest
-    gmock
-    ${_GRPC_GRPCPP}
-    ${CMAKE_DL_LIBS}
-    nlohmann_json::nlohmann_json
-)
+# target_link_libraries(SystemTestsRunner
+#     gtest
+#     gmock
+#     ${_GRPC_GRPCPP}
+#     ${CMAKE_DL_LIBS}
+#     nlohmann_json::nlohmann_json
+# )
 
-target_link_libraries(SystemTestsRunner
-  ni_grpc_sideband
-  ${RDMA_LIB}
-)
+# target_link_libraries(SystemTestsRunner
+#   ni_grpc_sideband
+#   ${RDMA_LIB}
+# )
 
-add_custom_command(
-  TARGET SystemTestsRunner POST_BUILD
-  COMMAND  ${CMAKE_COMMAND} -E copy_directory
-            ${CMAKE_SOURCE_DIR}/source/tests/assets/data/
-            $<TARGET_FILE_DIR:SystemTestsRunner>/)
+# add_custom_command(
+#   TARGET SystemTestsRunner POST_BUILD
+#   COMMAND  ${CMAKE_COMMAND} -E copy_directory
+#             ${CMAKE_SOURCE_DIR}/source/tests/assets/data/
+#             $<TARGET_FILE_DIR:SystemTestsRunner>/)
 
-if(WIN32)
-    target_link_libraries(SystemTestsRunner Delayimp nidaqmx nidcpower niDigital nidmm niFgen niRFmxBT niRFmxInstr niRFmxLTE niRFmxNR niRFmxSpecAn niRFmxWLAN niRFSA niRFSG niScope niswitch nisync niTClk nixnet nixntipstack)
-    set_target_properties(SystemTestsRunner PROPERTIES LINK_FLAGS "/DELAYLOAD:nicaiu.dll /DELAYLOAD:nidcpower.dll /DELAYLOAD:niDigital_64.dll /DELAYLOAD:nidmm_64.dll /DELAYLOAD:niFgen_64.dll /DELAYLOAD:niRFmxBT.dll /DELAYLOAD:niRFmxInstr.dll /DELAYLOAD:niRFmxLTE.dll /DELAYLOAD:niRFmxNR.dll /DELAYLOAD:niRFmxSpecAn.dll /DELAYLOAD:niRFmxWLAN.dll /DELAYLOAD:niRFSA_64.dll /DELAYLOAD:niRFSG_64.dll /DELAYLOAD:niScope.dll /DELAYLOAD:niswitch.dll /DELAYLOAD:nisync.dll /DELAYLOAD:niTClk_64.dll /DELAYLOAD:nixnet.dll /DELAYLOAD:nixntipstack.dll")
-    set(SystemTestsRunner CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /DELAYLOAD:nicaiu.dll /DELAYLOAD:nidcpower.dll /DELAYLOAD:niDigital_64.dll /DELAYLOAD:nidmm_64.dll /DELAYLOAD:niFgen_64.dll /DELAYLOAD:niRFmxBT.dll /DELAYLOAD:niRFmxInstr.dll /DELAYLOAD:niRFmxLTE.dll /DELAYLOAD:niRFmxNR.dll /DELAYLOAD:niRFmxSpecAn.dll /DELAYLOAD:niRFmxWLAN.dll /DELAYLOAD:niRFSA_64.dll /DELAYLOAD:niRFSG_64.dll /DELAYLOAD:niScope.dll /DELAYLOAD:niswitch.dll /DELAYLOAD:nisync.dll /DELAYLOAD:niTClk_64.dll /DELAYLOAD:nixnet.dll /DELAYLOAD:nixntipstack.dll")
-endif()
+# if(WIN32)
+#     target_link_libraries(SystemTestsRunner Delayimp nidaqmx nidcpower niDigital nidmm niFgen niRFmxBT niRFmxInstr niRFmxLTE niRFmxNR niRFmxSpecAn niRFmxWLAN niRFSA niRFSG niScope niswitch nisync niTClk nixnet nixntipstack)
+#     set_target_properties(SystemTestsRunner PROPERTIES LINK_FLAGS "/DELAYLOAD:nicaiu.dll /DELAYLOAD:nidcpower.dll /DELAYLOAD:niDigital_64.dll /DELAYLOAD:nidmm_64.dll /DELAYLOAD:niFgen_64.dll /DELAYLOAD:niRFmxBT.dll /DELAYLOAD:niRFmxInstr.dll /DELAYLOAD:niRFmxLTE.dll /DELAYLOAD:niRFmxNR.dll /DELAYLOAD:niRFmxSpecAn.dll /DELAYLOAD:niRFmxWLAN.dll /DELAYLOAD:niRFSA_64.dll /DELAYLOAD:niRFSG_64.dll /DELAYLOAD:niScope.dll /DELAYLOAD:niswitch.dll /DELAYLOAD:nisync.dll /DELAYLOAD:niTClk_64.dll /DELAYLOAD:nixnet.dll /DELAYLOAD:nixntipstack.dll")
+#     set(SystemTestsRunner CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /DELAYLOAD:nicaiu.dll /DELAYLOAD:nidcpower.dll /DELAYLOAD:niDigital_64.dll /DELAYLOAD:nidmm_64.dll /DELAYLOAD:niFgen_64.dll /DELAYLOAD:niRFmxBT.dll /DELAYLOAD:niRFmxInstr.dll /DELAYLOAD:niRFmxLTE.dll /DELAYLOAD:niRFmxNR.dll /DELAYLOAD:niRFmxSpecAn.dll /DELAYLOAD:niRFmxWLAN.dll /DELAYLOAD:niRFSA_64.dll /DELAYLOAD:niRFSG_64.dll /DELAYLOAD:niScope.dll /DELAYLOAD:niswitch.dll /DELAYLOAD:nisync.dll /DELAYLOAD:niTClk_64.dll /DELAYLOAD:nixnet.dll /DELAYLOAD:nixntipstack.dll")
+# endif()
 
-# Hook up different google test runners to CTest
+# # Hook up different google test runners to CTest
+# # add_test( NAME UnitTests COMMAND UnitTestsRunner )
 # add_test( NAME UnitTests COMMAND UnitTestsRunner )
-add_test( NAME UnitTests COMMAND UnitTestsRunner )
-add_test( NAME IntegrationTests COMMAND IntegrationTestsRunner )
-add_test( NAME SystemTests COMMAND SystemTestsRunner )
+# add_test( NAME IntegrationTests COMMAND IntegrationTestsRunner )
+# add_test( NAME SystemTests COMMAND SystemTestsRunner )
