@@ -118,6 +118,7 @@ namespace nifpga_grpc {
         }
       }
 
+      session_repository_->remove_session(session_grpc_session.id(), session_grpc_session.name());
       auto status = library_->Close(session, attribute);
       response->set_status(status);
       return ::grpc::Status::OK;
